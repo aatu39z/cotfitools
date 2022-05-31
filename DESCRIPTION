@@ -1,0 +1,17 @@
+Package: cotfitools
+Title: Herramientas para el procesamiento de archivos de monitoreo
+Version: 0.0.0.9000
+Authors@R: 
+    person("ATo", "GT - CoTFi", email = "atorres@siget.gob.sv",
+    role = c("aut", "cre"))
+Description: Herramientas diseñadas para el procesamiento y posterior análisis
+  de los archivos de monitoreo generados por el Sistema Nacional de Monitoreo
+  del Espectro, con especial interés en los archivos generados por el software
+  Scorpio de TCI. Adicionalmente, este paquete permite interactuar con la
+  información proporcionada de las licencia de frecuencias y lista de estaciones
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    tidyr
