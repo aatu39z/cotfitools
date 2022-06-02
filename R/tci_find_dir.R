@@ -1,32 +1,22 @@
-#' Cargar archivos ".csv" de TCI
+#' Identify TCI files inside directory
 #'
-#' La funcion "tci.find.dir()" explora los archivos que se encuentran dentro
-#' de la carpeta principal otorgada como argumento de entrada, con el objetivo de
-#' cargar la informacion de los archivos TCI identificados dentro de esta. La
-#' funcion devuelve a su salida un dataframe con el directorio, el nombre de los
-#' archivos identificados y el periodo de medicion asociado a cada archivo de
-#' medicion correspodniente
-#' @param main_folder_path String de caracteres con la direccion de la carpeta
-#' a explorar. Por defecto se toma el directorio actual de trabajo.
-#' @param stt_date Fecha inicial de la medicion del tipo as.POSIXct. Por defecto
-#' se toman seis meses antes de la fecha actual del sistema
-#' @param stp_date Fecha final de la medicion del tipo as.POSIXct. Por defecto
-#' se toma la fecha actual del sistema.
-#' @examples wd <- getwd()
+#' The function tci.find.dir explores the directory path supplied as input
+#' argument and looks for TCI files of measurements data. In brief, the function
+#' navigates inside the given directory path and checks if any file meet
+#' the criteria of a TCI file. As an output, the function brings back a data frame
+#' with the path and the detected TCI file names.
+#' @param main_folder_path String of characters with the directory path to be
+#' explored. Working directory is the default path.
+#' @examples
+#' wd <- getwd()
 #' setwd(system.file("extdata", package = "cotfitools"))
-#' start <- as.POSIXct("2021-01-01")
-#' stop <- as.POSIXct("2021-12-31")
-#' mon_info <- tci.find.dir(stt_date = start, stp_date = stop)
+#' mon_info <- tci.find.dir()
 #' View(mon_info)
 #' setwd(wd)
-#' @usage tci.find.dir()
+#' @usage tci.find.dir(__directory path__)
 #' @export
 #' @family TCI file management functions
-tci.find.dir <- function(main_folder_path = getwd(),
-                            stt_date = as.POSIXct(Sys.time()) - 6*31*24*60*60,
-                            stp_date = as.POSIXct(Sys.time())) {
-  #Configurando parametros de hora local del sistema
-  prev <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+tci.find.dir <- function(main_folder_path = getwd()) {
   dir_list <- list.dirs(path = main_folder_path) #Leyendo carpetas dentro del directorio ppal
   tci.flist <- data.frame() #Inicializando variable tci.flist
   #Declarar variable con los campos que contiene un archivo .csv de TCI en ingles
@@ -48,7 +38,8 @@ tci.find.dir <- function(main_folder_path = getwd(),
     #Determinando el numero de elementos en la lista de archivos .csv
     n <- length(csv_list)
     #Configurando parametros para la barra de carga
-    bar <- winProgressBar(title = "CoTFi Tools: Reading Directory",
+    bar <- winProgressBar(title = paste("CoTFi Tools: Reading Directory",
+                                        x, "of", length(dir_list)),
                           label = paste("Progress: "),
                           min = 0, max = 100, initial = 0, width = 350)
     if (n != 0) {
@@ -56,41 +47,29 @@ tci.find.dir <- function(main_folder_path = getwd(),
       for (j in 1:n) {
         path <- file.path(i, csv_list[j])
         #Extraer las primeras dos filas de cada archivo .csv
-        ex_row <- read.csv(file = path, sep = "^", skip = 1,
-                           nrows = 2, header = FALSE)
-        #Extraer primera fila con los nombres de campo del archivo a inspeccionar
-        csv_fields <- as.character(ex_row[1, ])
-        if (all(csv_fields == tci_en | csv_fields == tci_sp)) {
+        csv_fields <- read.csv(file = path, sep = "^", skip = 1, nrows = 2,
+                               header = FALSE, encoding = "latin1")
+        #Extraer las cabeceras de cada archivo .csv
+        csv_headers <- as.character(csv_fields[1, ])
+        if ((ncol(csv_fields) == 14) && (all(csv_headers == tci_en) || all(csv_headers == tci_sp))) {
           #Si se detecta que es un archivo TCI valido, entonces:
-          #Se extrae informacion de fecha inicial y fecha final de cada archivo
-          stt_tcidate <- as.POSIXct(ex_row[2,5], format = "%m/%d/%Y %I:%M:%S %p")
-          stp_tcidate <- as.POSIXct(ex_row[2,6], format = "%m/%d/%Y %I:%M:%S %p")
-          if ((stt_tcidate < stp_date) & (stp_tcidate > stt_date)) {
-            #Si la medicion del archivo se encuentra en el rango de fechas
-            #establecido, entonces:
-            #Se crea un dataframe con la informacion relacionada a ese archivo
-            write_row <- data.frame(Path = i,
-                                    File = csv_list[j],
-                                    Start_Time = stt_tcidate,
-                                    Stop_Time = stp_tcidate)
-            #Se almacena la informacion en la variable de salida
-            tci.flist <- rbind(tci.flist, write_row)
-          }
+          #Se crea un dataframe con la informacion relacionada a ese archivo
+          write_row <- data.frame(Path = i, File = csv_list[j])
+          #Se almacena la informacion en la variable de salida
+          tci.flist <- rbind(tci.flist, write_row)
         }
         #Actualizando los parametros de la barra de carga
         setWinProgressBar(bar, value = j*100/n,
-                          title = paste("CoTFi Tools: Reading Directory",
-                                        x, "of", length(dir_list)),
-                          label = paste("Progress: ",
-                                        round(j*100/n), "%", sep = ""))
+                          label = paste("Progress: ", round(j*100/n), "%", sep = ""))
       }
     }
     x <- x + 1
     #Cerrando barra de carga
     close(bar)
   }
-  #Se regresan los parametros de hora local a su estado original
-  Sys.setlocale("LC_TIME", prev)
-  #Se devuelve el resultado de la busqueda
+  if (length(tci.flist) == 0) {
+    warning("No valid TCI's files identified in directory")
+    tci.flist <- data.frame(Path = main_folder_path, File = NA)
+  }
   return(tci.flist)
 }

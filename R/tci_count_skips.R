@@ -1,20 +1,19 @@
-#' Determinar el numero de filas a saltar para llegar a los datos de medicion
+#' Get number of rows until the measurement data
 #'
-#' La funcion "tci.count.skips" ayuda a identificar el numero de filas que deben
-#' saltarse dentro de un archivo de medicion de TCI con el objetivo de extraer
-#' los datos registrados en cada tarea de medicion.
-#' @param tci_fdf Dataframe con la informacion de los archivos a leer. Sin valor
-#' por defecto configurado.
-#' @export
+#' The function tci.count.skips identify the number of rows that must
+#' be skipped until measurement data of any TCI file is detected. This
+#' information will permit reading TCI data when used read.csv function since
+#' the number of rows to be skipped is already known.
+#' @param tci_fdf Data frame with information of the path and TCI file name to
+#' be read
 #' @examples wd <- getwd()
 #' setwd(system.file("extdata", package = "cotfitools"))
-#' start <- as.POSIXct("2021-01-01")
-#' stop <- as.POSIXct("2021-12-31")
-#' mon_info <- tci.find.dir(stt_date = start, stp_date = stop)
+#' mon_info <- tci.find.dir()
 #' n_skips <- tci.count.skips(mon_info)
 #' setwd(wd)
 #' @usage tci.count.skips(tci_fdf)
 #' @family TCI file management functions
+#' @export
 tci.count.skips <- function(tci_fdf) {
   n <- nrow(tci_fdf)
   #Se inicializa la variable de salida "tci_skip" como un dataframe vacio
@@ -26,11 +25,11 @@ tci.count.skips <- function(tci_fdf) {
   #Se ejecuta un loop para cada uno de los archivos de la lista de entrada
   for (i in 1:n) {
     #Se forma la cadena de texto con la direccion de cada archivo a leer
-    tci_fpath <- file.path(tci_fdf[i, 1], tci_fdf[i, 2])
+    tci_fpath <- file.path(tci_fdf$Path[i], tci_fdf$File[i])
     #Se extraen las primeras dos filas del archivo .csv de tci
     row <- read.csv(file = tci_fpath, nrows = 2, skip = 5,
                     header = FALSE, sep = "^", blank.lines.skip = FALSE)
-    #Se incializa la variable "j" la cual irá contando el numero de espacios
+    #Se inicializa la variable "j" la cual irá contando el numero de espacios
     #hasta llegar a la fila de datos de medicion
     j <- 1
     while (!(all(is.na(row[2, ])))) {
