@@ -2,35 +2,33 @@
 % Please edit documentation in R/tci_get_index.R
 \name{tci.get.index}
 \alias{tci.get.index}
-\title{Obtener indice con informacion de medicion de archivos TCI}
+\title{Build index with TCI measurement task info}
 \usage{
 get.tci.findex(tci_fdf, nskips)
 }
 \arguments{
-\item{tci_fdf}{Dataframe con informacion del directorio, nombre del archivo,
-fecha inicial y fecha final de la medicion de los archivos TCI.}
+\item{tci_fdf}{Dataframe with the path and the TCI file names to be included
+in the index}
 
-\item{nskips}{Vector tipo numerico con el detalle del numero de filas que
-deben saltarse en cada archivo TCI para extraer la informacion del indice.}
+\item{nskips}{Numeric vector with details of the number of rows that must be
+skipped in each TCI file to extract information.}
 }
 \description{
-La funcion 'get.tci.findex' permite crear un indice con infomacion concerniente
-al tipo de parametros que se utilizaron para configurar cada tarea de medicion.
+The 'get.tci.findex' function allows creating an index with information
+concerning the type of parameters that were used to configure each
+measurement task.
 }
 \examples{
 wd <- getwd()
 setwd(system.file("extdata", package = "cotfitools"))
-start <- as.POSIXct("2021-01-01")
-stop <- as.POSIXct("2021-12-31")
-mon_info <- tci.find.dir(stt_date = start, stp_date = stop)
+mon_info <- tci.find.dir()
 n_skips <- tci.count.skips(mon_info)
 index <- tci.get.index(mon_info, n_skips)
+View(index)
 setwd(wd)
 }
 \seealso{
 Other TCI file management functions: 
-\code{\link{graph.occupancy}()},
-\code{\link{graph.spectrum}()},
 \code{\link{tci.count.skips}()},
 \code{\link{tci.filter.data}()},
 \code{\link{tci.filter.index}()},

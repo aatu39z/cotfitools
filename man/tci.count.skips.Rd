@@ -2,32 +2,29 @@
 % Please edit documentation in R/tci_count_skips.R
 \name{tci.count.skips}
 \alias{tci.count.skips}
-\title{Determinar el numero de filas a saltar para llegar a los datos de medicion}
+\title{Get number of rows until the measurement data}
 \usage{
 tci.count.skips(tci_fdf)
 }
 \arguments{
-\item{tci_fdf}{Dataframe con la informacion de los archivos a leer. Sin valor
-por defecto configurado.}
+\item{tci_fdf}{Data frame with information of the path and TCI file name to
+be read}
 }
 \description{
-La funcion "tci.count.skips" ayuda a identificar el numero de filas que deben
-saltarse dentro de un archivo de medicion de TCI con el objetivo de extraer
-los datos registrados en cada tarea de medicion.
+The function tci.count.skips identify the number of rows that must
+be skipped until measurement data of any TCI file is detected. This
+information will permit reading TCI data when used read.csv function since
+the number of rows to be skipped is already known.
 }
 \examples{
 wd <- getwd()
 setwd(system.file("extdata", package = "cotfitools"))
-start <- as.POSIXct("2021-01-01")
-stop <- as.POSIXct("2021-12-31")
-mon_info <- tci.find.dir(stt_date = start, stp_date = stop)
+mon_info <- tci.find.dir()
 n_skips <- tci.count.skips(mon_info)
 setwd(wd)
 }
 \seealso{
 Other TCI file management functions: 
-\code{\link{graph.occupancy}()},
-\code{\link{graph.spectrum}()},
 \code{\link{tci.filter.data}()},
 \code{\link{tci.filter.index}()},
 \code{\link{tci.find.dir}()},

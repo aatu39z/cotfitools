@@ -16,8 +16,6 @@ La funcion permite filtrar por frecuencia los resultados de las mediciones
 }
 \seealso{
 Other TCI file management functions: 
-\code{\link{graph.occupancy}()},
-\code{\link{graph.spectrum}()},
 \code{\link{tci.count.skips}()},
 \code{\link{tci.filter.index}()},
 \code{\link{tci.find.dir}()},

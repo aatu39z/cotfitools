@@ -31,8 +31,6 @@ setwd(wd)
 }
 \seealso{
 Other TCI file management functions: 
-\code{\link{graph.occupancy}()},
-\code{\link{graph.spectrum}()},
 \code{\link{tci.count.skips}()},
 \code{\link{tci.filter.data}()},
 \code{\link{tci.filter.index}()},

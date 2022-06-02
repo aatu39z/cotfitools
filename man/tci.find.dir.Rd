@@ -2,41 +2,30 @@
 % Please edit documentation in R/tci_find_dir.R
 \name{tci.find.dir}
 \alias{tci.find.dir}
-\title{Cargar archivos ".csv" de TCI}
+\title{Identify TCI files inside directory}
 \usage{
-tci.find.dir()
+tci.find.dir(__directory path__)
 }
 \arguments{
-\item{main_folder_path}{String de caracteres con la direccion de la carpeta
-a explorar. Por defecto se toma el directorio actual de trabajo.}
-
-\item{stt_date}{Fecha inicial de la medicion del tipo as.POSIXct. Por defecto
-se toman seis meses antes de la fecha actual del sistema}
-
-\item{stp_date}{Fecha final de la medicion del tipo as.POSIXct. Por defecto
-se toma la fecha actual del sistema.}
+\item{main_folder_path}{String of characters with the directory path to be
+explored. Working directory is the default path.}
 }
 \description{
-La funcion "tci.find.dir()" explora los archivos que se encuentran dentro
-de la carpeta principal otorgada como argumento de entrada, con el objetivo de
-cargar la informacion de los archivos TCI identificados dentro de esta. La
-funcion devuelve a su salida un dataframe con el directorio, el nombre de los
-archivos identificados y el periodo de medicion asociado a cada archivo de
-medicion correspodniente
+The function tci.find.dir explores the directory path supplied as input
+argument and looks for TCI files of measurements data. In brief, the function
+navigates inside the given directory path and checks if any file meet
+the criteria of a TCI file. As an output, the function brings back a data frame
+with the path and the detected TCI file names.
 }
 \examples{
 wd <- getwd()
 setwd(system.file("extdata", package = "cotfitools"))
-start <- as.POSIXct("2021-01-01")
-stop <- as.POSIXct("2021-12-31")
-mon_info <- tci.find.dir(stt_date = start, stp_date = stop)
+mon_info <- tci.find.dir()
 View(mon_info)
 setwd(wd)
 }
 \seealso{
 Other TCI file management functions: 
-\code{\link{graph.occupancy}()},
-\code{\link{graph.spectrum}()},
 \code{\link{tci.count.skips}()},
 \code{\link{tci.filter.data}()},
 \code{\link{tci.filter.index}()},

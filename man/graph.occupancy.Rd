@@ -27,14 +27,7 @@ graficas que permitan visualizar los niveles de campo electrico medidos en las
 tareas de monitoreo
 }
 \seealso{
-Other TCI file management functions: 
-\code{\link{graph.spectrum}()},
-\code{\link{tci.count.skips}()},
-\code{\link{tci.filter.data}()},
-\code{\link{tci.filter.index}()},
-\code{\link{tci.find.dir}()},
-\code{\link{tci.get.data}()},
-\code{\link{tci.get.index}()},
-\code{\link{tci.import.data}()}
+Other Graphics functions: 
+\code{\link{graph.spectrum}()}
 }
-\concept{TCI file management functions}
+\concept{Graphics functions}
