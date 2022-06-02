@@ -12,7 +12,7 @@
 #' @param Max Si es TRUE se grafica el nivel maximo de campo electrico medido
 #' @param thr Nivel umbral utilizado
 #' @usage plot.spectrum(measDF, refLev, DBdiv, Avg, Max)
-#' @family TCI file management functions
+#' @family Graphics functions
 #' @export
 graph.occupancy <- function(measDF, Avg = TRUE, Max = TRUE,
                             barline = TRUE, threshold = 0, bw){
